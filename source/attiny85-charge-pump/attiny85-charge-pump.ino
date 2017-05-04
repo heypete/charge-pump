@@ -195,11 +195,12 @@ void setup() {
             (1 << ADPS1) |
             (1 << ADPS0) |
             (1 << ADSC);
+
+  // Initialize PORTB with pin P1 high.
+  PORTB = P1;
 }
 
 void loop() {
-  // Initialize the phase variable. This starts the pumping with pin P1 high.
-  static char phase = P1;
 
   /* Setup the togglePort variable. When, for example, you XOR P1 with
     togglePort the result is P2, and vice versa. This allows for faster switching of
@@ -210,10 +211,8 @@ void loop() {
     voltage is less than the threshold, start pumping. Otherwise, skip this cycle
     without pumping. */
   if (ADCH < REF) {
-    /* Toggle between the two phases by setting whatever pin is the current
-      phase state high and the other low. Then XOR the phase with togglePort to switch
-      the pump pins in the phase variable for the next cycle. */
-    PORTB = phase;
-    phase ^= togglePort;
+    /* Toggle between the two states: XORing the current state with togglePort
+      switches which pump pin is high. */
+    PORTB ^= togglePort;
   }
 }
