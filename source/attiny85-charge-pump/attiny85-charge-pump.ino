@@ -198,18 +198,21 @@ void setup() {
 }
 
 void loop() {
-  // Initialize the phase variable. This starts with pin P2 high.
+  // Initialize the phase variable. This starts the pumping with pin P1 high.
   static char phase = P1;
-  static char togglePort = P1^P2;
 
-  // Read most recent analog voltage with 8 bit precision.
-  int volts = ADCH;
+  /* Setup the togglePort variable. When, for example, you XOR P1 with
+    togglePort the result is P2, and vice versa. This allows for faster switching of
+    the pump pins by saving an if/else statement. */
+  static char togglePort = P1 ^ P2;
 
-  /* If the voltage is less than the threshold, start pumping. Otherwise, skip
-    this cycle without pumping. */
-  if (volts < REF) {
-
-    // Toggle between the two phases.
+  /* Read most recent analog voltage with 8 bit precision from ADCH. If the
+    voltage is less than the threshold, start pumping. Otherwise, skip this cycle
+    without pumping. */
+  if (ADCH < REF) {
+    /* Toggle between the two phases by setting whatever pin is the current
+      phase state high and the other low. Then XOR the phase with togglePort to switch
+      the pump pins in the phase variable for the next cycle. */
     PORTB = phase;
     phase ^= togglePort;
   }
