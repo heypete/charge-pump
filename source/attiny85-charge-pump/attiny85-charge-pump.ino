@@ -199,7 +199,8 @@ void setup() {
 
 void loop() {
   // Initialize the phase variable. This starts with pin P2 high.
-  static char phase = 0;
+  static char phase = P1;
+  static char togglePort = P1^P2;
 
   // Read most recent analog voltage with 8 bit precision.
   int volts = ADCH;
@@ -209,11 +210,7 @@ void loop() {
   if (volts < REF) {
 
     // Toggle between the two phases.
-    if (phase) {
-      PORTB = P1;
-    } else {
-      PORTB = P2;
-    }
-    phase ^= 1;
+    PORTB = phase;
+    phase ^= togglePort;
   }
 }
