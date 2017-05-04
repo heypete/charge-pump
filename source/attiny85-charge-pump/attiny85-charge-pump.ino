@@ -9,14 +9,13 @@
   convert 5V to 15V as-configured, or higher if one adds additional intermediate
   stages.
 
-  Assuming an 8 MHz system clock, such as the internal RC oscillator,
-  and making certain compromises (e.g. using the ADC in free running, 8-bit mode
-  with a 1 MHz ADC clock, not using interrupts, and dedicating the attiny85 solely
-  as a charge pump controller) the attiny85 can switch at nearly 200 kHz. At a 1
-  MHz system clock with a 125 kHz ADC clock, it can switch around 25 kHz.
-  Occasional pulses are missed due to interrupts (e.g. for the millis timer) being
-  handled, but this doesn't disrupt regulation in any meaningful way.
-
+  Assuming an 8 MHz system clock, such as the internal RC oscillator, and making
+  certain compromises (e.g. using the ADC in free running, 8-bit mode with a 1 MHz
+  ADC clock, not using interrupts, and dedicating the attiny85 solely as a charge
+  pump controller) the attiny85 can switch at 450 kHz. At a 1 MHz system clock
+  with a 125 kHz ADC clock, it can switch around 55 kHz. Occasional pulses are
+  missed due to interrupts (e.g. for the millis timer) being handled, but this
+  doesn't disrupt regulation in any meaningful way.
 
   Regulation is achieved using a pulse-skipping method: if the high voltage is
   above the threshold set by the potentiometer, the charge pump stops pumping and
@@ -24,14 +23,12 @@
   threshold, the charge pump starts pumping more charge up to the high voltage
   stage until the threshold is reached.
 
-  Although this code is written in AVR
-  C and directly accesses registers for the highest performance, it is written for
-  and easily compiled and deployed using the Arduino IDE and a compatible AVR
-  programmer (I use the USBtinyISP). It can be easily and quickly adapted for
-  Atmel Studio. It's quite small: in the Arduino IDE, it compiles to 350 bytes of
-  flash and uses 10 bytes of RAM for global memory. In Atmel Studio, it uses 134
-  bytes of flash and 1 byte for global memory. Even using the Arduino IDE, it's
-  hardly taxing.
+  Although this code is written in AVR C and directly accesses registers for the
+  highest performance, it is written for and easily compiled and deployed using
+  the Arduino IDE and a compatible AVR programmer (I use the USBtinyISP). It can
+  be easily and quickly adapted for Atmel Studio. It's quite small: in the Arduino
+  IDE, it compiles to 322 bytes of flash and uses 9 bytes of RAM for global
+  memory (Arduino overhead). In Atmel Studio, it's slightly smaller.
 
   Motivation:
   I had screwed up the fuses on a few AVR chips and couldn't program them with my
